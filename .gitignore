@@ -1,0 +1,21 @@
+# 编译生成的中间文件和输出文件
+Objects/
+Listings/
+*.o
+*.d
+*.crf
+*.map
+*.axf
+*.hex
+*.bin
+*.lnp
+*.htm
+*.dep
+*.build_log.htm
+
+# Keil 用户个人的界面配置文件（不要传到云端，否则会覆盖别人的设置）
+*.uvguix.*
+*.uvoptx
+
+# 备份文件
+*.bak
