@@ -33,14 +33,21 @@ TFmini Plus 传感器与 STM32 的硬件连接如下：
 ```c
 #include "tfmini_plus.h"
 
-// 假设在你的主循环或者状态机中调用
-void Robot_Task(void) {
-    // 检查是否成功解析到新的一帧数据
-    if (TFmini_Update() == 1) {
-        uint16_t distance = TFmini_GetDistance(); // 获取距离 (cm)
-        uint16_t strength = TFmini_GetStrength(); // 获取信号强度
-        
-        // 你的控制逻辑，例如传入 PID 控制器
-        // ...
+// 假设在你的主循环或者状态机中调用，本项目写在了此处，可自行做修改
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart,uint16_t Size)
+{
+	if(huart->Instance == USART2)
+    {
+			USER_USART2_RxHandler(huart,Size);
     }
+		   huart->ReceptionType = HAL_UART_RECEPTION_TOIDLE;
+	
+  /* Enalbe IDLE interrupt */
+   __HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
+	
+  /* Enable the DMA transfer for the receiver request */
+   SET_BIT(huart->Instance->CR3, USART_CR3_DMAR);
+	
+  /* Enable DMA */
+   __HAL_DMA_ENABLE(huart->hdmarx);
 }
